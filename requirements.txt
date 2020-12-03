@@ -4,3 +4,4 @@ pytz
 python-dateutil
 datasette-publish-now
 sqlite-utils
+datasette-json-html
