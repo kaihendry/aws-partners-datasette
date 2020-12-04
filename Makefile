@@ -6,5 +6,8 @@ partners.db: partners.json
 partners.json:
 	./fetch.sh
 
+publish:
+	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html
+
 clean:
 	rm partners.json partners.db
