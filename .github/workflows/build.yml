@@ -33,4 +33,4 @@ jobs:
       env:
         NOW_TOKEN: ${{ secrets.NOW_TOKEN }}
       run: |-
-	      make publish
+        make publish
