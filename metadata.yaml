@@ -1,5 +1,7 @@
 title: AWS Partners Singapore
-source: kaihendry/aws-partners-datasette
-source_url: https://github.com/kaihendry/aws-partners-datasette
 about: kaihendry/aws-partners-datasette
 about_url: https://github.com/kaihendry/aws-partners-datasette
+description_html: |-
+        <h1>AWS ThoughtWorks partnership details held by AWS</h1>
+        <a href="/partners/partners?literal_name__exact=ThoughtWorks">ThoughtWorks listing</a>
+        <p>Is the data correct? Could it be better?</p>
