@@ -7,7 +7,7 @@ partners.json:
 	./fetch.sh
 
 publish: partners.db
-	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml
+	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --token ${NOW_TOKEN}
 
 clean:
 	rm partners.json partners.db
