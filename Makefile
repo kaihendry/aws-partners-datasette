@@ -1,5 +1,8 @@
 partners.db: partners.json
-	sqlite-utils insert --alter partners.db partners partners.json --pk=_id
+	@echo BEGIN DUPLICATES
+	@jq ".[]._id" < partners.json | sort | uniq -cd
+	@echo END DUPLICATES
+	sqlite-utils insert --alter partners.db partners partners.json --pk=_id --ignore
 	sqlite-utils transform partners.db partners -o literal_name
 	./create-summary-view.sh
 
