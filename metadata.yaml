@@ -1,7 +1,8 @@
-title: AWS Partners Singapore
+title: AWS Partners Global
 about: kaihendry/aws-partners-datasette
 about_url: https://github.com/kaihendry/aws-partners-datasette
 description_html: |-
         <h1>AWS ThoughtWorks partnership details held by AWS</h1>
-        <a href="/partners/partners?literal_name__exact=ThoughtWorks">ThoughtWorks listing</a>
+        <a href="/partners/summary?partner_info__contains=ThoughtWorks">ThoughtWorks listing</a>
+        <a href="/partners?sql=select+launch_rank%2C+partner_info%2C+logo%2C+customer_type%2C+current_program_status%2C+website%2C+customer_launches_count%2C+services_count%2C+reference_count%2C+aws_certifications_count+from+summary+WHERE+launch_rank+>+300+and+launch_rank+<400">300s ranking</a>
         <p>Is the data correct? Could it be better?</p>
