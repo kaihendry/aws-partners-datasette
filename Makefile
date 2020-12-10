@@ -13,4 +13,4 @@ publish: partners.db
 	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --token ${NOW_TOKEN}
 
 clean:
-	rm partners.json partners.db
+	rm -f partners.json partners.db

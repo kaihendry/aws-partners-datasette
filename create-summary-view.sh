@@ -18,7 +18,8 @@ website,
 customer_launches_count,
 services_count,
 reference_count,
-aws_certifications_count
+aws_certifications_count,
+country
 from partners
 order by customer_launches_count DESC'
 HERE
