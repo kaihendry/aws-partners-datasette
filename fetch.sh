@@ -8,11 +8,11 @@ while curl -f -s "https://api.finder.partners.aws.a2z.com/search?locale=en&size=
 	jq '.message.results |map(del(._source) + ._source)' > $tmp
 do
 	test -s $tmp || break
-	jq 'length' $tmp
+	echo -n Fetched $(jq 'length' $tmp) records
 	test $(jq 'length' $tmp) -eq 0 && break
 	cat $tmp >> partners.json
-	echo Fetch from: $from
 	from=$(($from + $size))
+	echo .. fetching from: $from
 done
 
 jq -s 'add' < partners.json > $tmp

@@ -1,7 +1,7 @@
+sqlite3 --version
+sqlite-utils --version
 sqlite-utils create-view --replace partners.db summary <<HERE 'select
-RANK () OVER (
-		ORDER BY customer_launches_count DESC
-	) launch_rank,
+RANK() OVER ( ORDER BY customer_launches_count DESC) launch_rank,
 json_object(
     "href", "https://partners.amazonaws.com/partners/" || _id,
     "label", literal_name
