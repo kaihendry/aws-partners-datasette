@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/bash -e
 
 size=100
 from=0
 tmp=$(mktemp)
 
 while curl -f -s "https://api.finder.partners.aws.a2z.com/search?locale=en&size=$size&from=$from" |
-	jq '.message.results | map(del(._source) + ._source) | map(.country=[.office_address[].country] | del(.office_address))' > $tmp
+	jq '.message.results | map(del(._source) + ._source)' > $tmp
 do
 	test -s $tmp || break
 	echo -n Fetched $(jq 'length' $tmp) records

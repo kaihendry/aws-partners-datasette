@@ -9,8 +9,14 @@ partners.db: partners.json
 partners.json:
 	./fetch.sh
 
+.PHONY: publish
 publish: partners.db
 	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --token ${NOW_TOKEN}
 
+.PHONY: run
+run:
+	datasette partners.db --metadata metadata.yaml
+
+.PHONY: clean
 clean:
 	rm -f partners.json partners.db
