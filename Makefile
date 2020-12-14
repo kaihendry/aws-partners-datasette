@@ -11,7 +11,11 @@ partners.json:
 
 .PHONY: publish
 publish: partners.db
-	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --token ${NOW_TOKEN}
+ifndef NOW_TOKEN
+	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --setting default_page_size 10 --setting max_returned_rows 100
+else
+	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --token ${NOW_TOKEN} --setting default_page_size 10 --setting max_returned_rows 100
+endif
 
 .PHONY: run
 run:
