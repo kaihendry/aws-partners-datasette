@@ -17,6 +17,10 @@ else
 	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --token ${NOW_TOKEN} --setting default_page_size 10 --setting max_returned_rows 100
 endif
 
+
+cloudrunpublish: partners.db
+	datasette publish cloudrun partners.db --service=aws-datasette --install datasette-json-html 
+
 .PHONY: run
 run:
 	datasette partners.db --metadata metadata.yaml

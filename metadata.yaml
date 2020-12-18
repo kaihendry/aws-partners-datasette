@@ -8,7 +8,8 @@ description_html: |-
         <a href='/partners?sql=select+*+from+partners+where+literal_name+%3D+"ThoughtWorks"'>ThoughtWorks listing</a>
         </li>
         <li>
-        <a href="/partners?sql=select+launch_rank%2C+partner_info%2C+logo%2C+customer_type%2C+current_program_status%2C+website%2C+customer_launches_count%2C+services_count%2C+reference_count%2C+aws_certifications_count+from+summary+WHERE+launch_rank+>+100+and+launch_rank+<200">TW ranking</a>
+        <a href="/partners?sql=select%0D%0A++A.*%0D%0Afrom%0D%0A++summary+A%0D%0A++INNER+JOIN+summary+B+ON+A.launch_rank+>%3D+B.launch_rank+-+3%0D%0A++AND+A.launch_rank+-4+<%3D+B.launch_rank%0D%0AWHERE%0D%0A++B.'partner_info'+LIKE+'%25ThoughtWorks%25'">
+        TW ranking</a>
         </li>
         <li>
         <a href="/partners/summary?office_address__contains=Singapore">Partners in Singapore</a>
