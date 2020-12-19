@@ -19,7 +19,7 @@ endif
 
 
 cloudrunpublish: partners.db
-	datasette publish cloudrun partners.db --service=aws-datasette --install datasette-json-html 
+	datasette publish cloudrun partners.db --service=aws-datasette --install datasette-json-html --metadata metadata.yaml
 
 .PHONY: run
 run:
