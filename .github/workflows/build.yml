@@ -6,9 +6,9 @@ on:
       - main
     paths-ignore:
       - '**/README.md'
-    workflow_dispatch:
-      schedule:
-        - cron: '0 0 * * MON'
+  workflow_dispatch:
+    schedule:
+      - cron: '0 0 * * MON'
 
 jobs:
   build:
