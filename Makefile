@@ -14,7 +14,7 @@ partners.json:
 .PHONY: publish
 publish: partners.db
 ifndef NOW_TOKEN
-	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --setting default_page_size 10 --setting max_returned_rows 100
+	@echo NOW_TOKEN missing!
 else
 	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --token ${NOW_TOKEN} --setting default_page_size 10 --setting max_returned_rows 100
 endif
