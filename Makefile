@@ -1,3 +1,5 @@
+SERVICE = aws-datasette
+
 partners.db: partners.json
 	@echo BEGIN DUPLICATES
 	@jq ".[]._id" < partners.json | sort | uniq -cd
@@ -17,9 +19,8 @@ else
 	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --token ${NOW_TOKEN} --setting default_page_size 10 --setting max_returned_rows 100
 endif
 
-
 cloudrunpublish: partners.db
-	datasette publish cloudrun partners.db --service=aws-datasette --install datasette-json-html --metadata metadata.yaml
+	datasette publish cloudrun partners.db --service=$(SERVICE) --install datasette-json-html --metadata metadata.yaml
 
 .PHONY: run
 run:
@@ -28,3 +29,6 @@ run:
 .PHONY: clean
 clean:
 	rm -f partners.json partners.db
+
+setupdomain:
+	gcloud beta run domain-mappings create --service $(SERVICE) --domain $(SERVICE).dabase.com --platform managed
