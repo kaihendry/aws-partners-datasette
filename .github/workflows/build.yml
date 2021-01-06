@@ -34,7 +34,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - name: Deploy Datasette using Zeit Now
+      - name: Deploy Datasette to Vercel
         env:
           NOW_TOKEN: ${{ secrets.NOW_TOKEN }}
         run: |-
