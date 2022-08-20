@@ -5,17 +5,17 @@ on:
     branches:
       - main
     paths-ignore:
-      - '**/README.md'
+      - "**/README.md"
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * MON'
+    - cron: "0 0 * * MON"
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -31,9 +31,9 @@ jobs:
         run: |
           pip install -r requirements.txt
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: '12.x'
+          node-version: 16
       - name: Deploy Datasette to Vercel
         env:
           NOW_TOKEN: ${{ secrets.NOW_TOKEN }}
