@@ -5,7 +5,6 @@ partners.db: partners.json
 	@jq ".[]._id" < partners.json | sort | uniq -cd
 	@echo END DUPLICATES
 	sqlite-utils insert --alter partners.db partners partners.json --pk=_id --ignore
-	sqlite-utils transform partners.db partners -o literal_name
 	./create-summary-view.sh
 
 partners.json:
@@ -13,14 +12,7 @@ partners.json:
 
 .PHONY: publish
 publish: partners.db
-ifndef NOW_TOKEN
-	@echo NOW_TOKEN missing!
-else
-	datasette publish vercel partners.db --project=aws-partners-singapore --install datasette-json-html --metadata metadata.yaml --token ${NOW_TOKEN} --setting default_page_size 10 --setting max_returned_rows 100
-endif
-
-cloudrunpublish: partners.db
-	datasette publish cloudrun partners.db --service=$(SERVICE) --install datasette-json-html --metadata metadata.yaml
+	datasette publish fly partners.db --app="aws-partners" --metadata metadata.yaml
 
 .PHONY: run
 run:
