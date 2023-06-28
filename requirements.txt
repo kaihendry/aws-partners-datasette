@@ -2,7 +2,8 @@ datasette
 requests
 pytz
 python-dateutil
-datasette-publish-vercel
+datasette-publish-fly
 sqlite-utils
 datasette-json-html
 sqlite-diffable
+datasette-block-robots

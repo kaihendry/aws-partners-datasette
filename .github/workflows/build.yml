@@ -1,4 +1,4 @@
-name: Build README and deploy Datasette
+name: Deploy Datasette and keep a history of changes of the partner db
 
 on:
   push:
@@ -23,12 +23,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - name: Deploy Datasette to Vercel
+          node-version: 18
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
         env:
-          NOW_TOKEN: ${{ secrets.NOW_TOKEN }}
-        run: |-
-          make publish
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: Convert to newline-delimited JSON
         run: |-
           rm partners/* || true
