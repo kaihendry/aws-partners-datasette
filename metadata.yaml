@@ -5,13 +5,13 @@ description_html: |-
         <p>Example queries:</p>
         <ul>
         <li>
-        <a href='/partners?sql=select+*+from+partners+where+literal_name+%3D+"ThoughtWorks"'>ThoughtWorks listing</a>
+        <a href='/partners?sql=select+*+from+partners+where+literal_name+%3D+"Thoughtworks"'>Thoughtworks listing</a>
         </li>
         <li>
-        <a href="/partners?sql=select%0D%0A++A.*%0D%0Afrom%0D%0A++summary+A%0D%0A++INNER+JOIN+summary+B+ON+A.launch_rank+>%3D+B.launch_rank+-+3%0D%0A++AND+A.launch_rank+-4+<%3D+B.launch_rank%0D%0AWHERE%0D%0A++B.'partner_info'+LIKE+'%25ThoughtWorks%25'">
-        ThoughtWorks Global ranking in context</a>
+        <a href="/partners?sql=select%0D%0A++A.*%0D%0Afrom%0D%0A++summary+A%0D%0A++INNER+JOIN+summary+B+ON+A.launch_rank+>%3D+B.launch_rank+-+3%0D%0A++AND+A.launch_rank+-4+<%3D+B.launch_rank%0D%0AWHERE%0D%0A++B.'partner_info'+LIKE+'%25Thoughtworks%25'">
+        Thoughtworks Global ranking in context</a>
         </li>
         <li>
-        <a href="/partners/summary?office_address__contains=Singapore">Partners in Singapore</a>
+        <a href="/partners/summary?office_address__contains=London">Partners in London</a>
         </li>
         </ul>
