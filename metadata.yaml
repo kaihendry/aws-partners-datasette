@@ -1,6 +1,9 @@
 title: AWS Partners Global
 about: kaihendry/aws-partners-datasette
 about_url: https://github.com/kaihendry/aws-partners-datasette
+plugins:
+        datasette-json-html:
+        datasette-block-robots:
 description_html: |-
         <p>Example queries:</p>
         <ul>
