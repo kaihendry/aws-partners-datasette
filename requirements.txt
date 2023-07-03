@@ -7,3 +7,4 @@ sqlite-utils
 datasette-json-html
 sqlite-diffable
 datasette-block-robots
+datasette-copyable

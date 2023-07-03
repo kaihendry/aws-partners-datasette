@@ -13,7 +13,7 @@ partners.json:
 .PHONY: publish
 publish: partners.db
 	datasette publish fly partners.db --app="aws-partners" --metadata metadata.yaml \
-	  --install datasette-block-robots --install datasette-json-html
+	  --install datasette-block-robots --install datasette-json-html --install datasette-copyable
 
 .PHONY: run
 run:
