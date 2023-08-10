@@ -25,10 +25,15 @@ jobs:
           git log --pretty=format:"%ad %H" --date=short | while read -r date hash
           do
                 echo $date $hash
-                git checkout $hash -- partners/
+                git checkout $hash -- partners/ || break
                 rm partners.db || true
                 sqlite-diffable load partners.db partners
                 sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
           done
           head premier.csv
           wc -l premier.csv
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: CSV history
+          path: premier.csv
