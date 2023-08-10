@@ -1,6 +1,7 @@
 name: Deploy Datasette and keep a history of changes of the partner db
 
 on:
+  push:
   schedule:
     - cron: "0 0 * * MON"
 
