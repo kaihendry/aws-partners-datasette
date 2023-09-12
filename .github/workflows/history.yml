@@ -30,8 +30,9 @@ jobs:
                 sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
           done
           wc -l premier.csv
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload to gist
+        uses: exuanbo/actions-deploy-gist@v1
         with:
-          name: history
-          path: premier.csv
+          token: ${{ secrets.TOKEN }}
+          gist_id: premier
+          file_path: premier.csv
