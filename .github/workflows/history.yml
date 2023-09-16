@@ -30,9 +30,14 @@ jobs:
                 sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
           done
           wc -l premier.csv
-      - name: Upload to gist
-        uses: exuanbo/actions-deploy-gist@v1
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
-          token: ${{ secrets.TOKEN }}
-          gist_id: premier
-          file_path: premier.csv
+          role-to-assume: arn:aws:iam::407461997746:role/github-actions-Role-56IHHM969DKJ
+          aws-region: eu-west-2
+      - name: Upload to S3
+        run: |-
+          bucket_name="${{ github.repository }}"
+          region="eu-west-2"
+          aws s3 mb s3://$bucket_name --region $region || true
+          aws s3 cp premier.csv s3://$bucket_name/
+          aws s3 presign s3://$bucket_name/premier.csv
