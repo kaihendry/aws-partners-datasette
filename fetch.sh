@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-size=75
+size=30
 from=0
 tmp=$(mktemp)
 
