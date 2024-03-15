@@ -7,8 +7,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write
   contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -20,9 +21,8 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - run: pip install -r requirements.txt
-      - run: datasette plugins
       - name: Compute history
         run: |-
           git log --pretty=format:"%ad %H" --date=short | while read -r date hash
@@ -34,14 +34,11 @@ jobs:
                 sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
           done
           wc -l premier.csv
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::407461997746:role/github-actions-Role-56IHHM969DKJ
-          aws-region: eu-west-2
-      - name: Upload to S3
-        run: |-
-          bucket_name="aws-partners-datasette"
-          region="eu-west-2"
-          aws s3 mb s3://$bucket_name --region $region || true
-          aws s3 cp premier.csv s3://$bucket_name/
-          aws s3 presign s3://$bucket_name/premier.csv
+      - name: Setup Pages
+        uses: actions/configure-pages@v1
+      - run:  mkdir "_site" && mv plot/index.html premier.csv _site/
+      - name: Upload artifact # TODO: we want to ideally upload one file, not overwrite the whole site!
+        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
