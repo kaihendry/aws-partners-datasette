@@ -4,6 +4,9 @@ d3.csv("premier.csv").then(function(data) {
     companies.forEach(function(company) {
         var option = document.createElement("option");
         option.text = company;
+        if (company === 'Thoughtworks') {
+            option.selected = true;
+        }
         select.add(option);
     });
     select.onchange = function() {
