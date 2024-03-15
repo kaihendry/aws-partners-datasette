@@ -1,10 +1,15 @@
-name: Compute history
+name: AWS certifications page
 
 # History of Premier partners
 # https://partners.amazonaws.com/partners/001E000000Ufa9FIAR/Thoughtworks
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Deploy Datasette and keep a history of changes of the partner db"
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -34,10 +39,11 @@ jobs:
                 sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
           done
           wc -l premier.csv
+          echo 'date,company,certificates' | cat - premier.csv > temp && mv temp premier.csv
       - name: Setup Pages
         uses: actions/configure-pages@v1
-      - run:  mkdir "_site" && mv plot/index.html premier.csv _site/
-      - name: Upload artifact # TODO: we want to ideally upload one file, not overwrite the whole site!
+      - run:  mkdir "_site" && mv plot/* premier.csv _site/
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
       - name: Deploy to GitHub Pages
         id: deployment
