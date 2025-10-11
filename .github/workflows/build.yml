@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: "0 0 * * MON"
 
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
