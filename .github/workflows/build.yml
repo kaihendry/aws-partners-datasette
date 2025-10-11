@@ -2,6 +2,10 @@ name: Deploy Datasette and keep a history of changes of the partner db
 
 on:
   push:
+    paths-ignore:
+      - '.github/workflows/history.yml'
+      - 'plot/**'
+      - '*.md'
   schedule:
     - cron: "0 0 * * MON"
 
