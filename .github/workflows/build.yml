@@ -22,7 +22,7 @@ jobs:
       - name: Convert to newline-delimited JSON for archiving in git
         run: |-
           rm partners/* || true # remove old dump
-          sqlite-diffable dump partners.db partners --all
+          uv run sqlite-diffable dump partners.db partners --all
       - name: Commit any changes
         run: |-
           git config user.name "Automated"

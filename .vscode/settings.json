@@ -1,0 +1,13 @@
+{
+  // Remove trailing spaces automatically on save
+  "files.trimTrailingWhitespace": true,
+
+  // Ensure every file ends with exactly one newline
+  "files.insertFinalNewline": true,
+
+  // Normalize line endings
+  "files.eol": "\n",
+
+  // Enforce format-on-save to catch other cleanup issues
+  "editor.formatOnSave": true
+}
