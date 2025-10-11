@@ -32,11 +32,17 @@ jobs:
       - uses: astral-sh/setup-uv@v7
       - name: Compute history
         run: |-
-          git log --pretty=format:"%ad %H" --date=short | while read -r date hash
+          # Only process commits that contain data updates (match "Latest data:" pattern)
+          git log --pretty=format:"%ad %H %s" --date=short | \
+            awk '/Latest data:/ {print $1, $2}' | \
+            while read -r date hash
           do
-                echo $date $hash
+                echo "Processing: $date $hash"
                 git checkout $hash -- partners/ || break
-                git lfs checkout partners/ || true
+                # Only try LFS checkout if the file is actually tracked by LFS
+                if git lfs ls-files -n | grep -q "partners/"; then
+                  git lfs checkout partners/ 2>/dev/null || true
+                fi
                 rm partners.db || true
                 uv run sqlite-diffable load partners.db partners
                 sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count, customer_launches_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
