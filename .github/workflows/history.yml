@@ -16,7 +16,7 @@ permissions:
   pages: write
   id-token: write
 
-concurrency: 
+concurrency:
   group: pages
   cancel-in-progress: true
 
@@ -28,10 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - run: pip install -r requirements.txt
+      - uses: astral-sh/setup-uv@v6
       - name: Compute history
         run: |-
           git log --pretty=format:"%ad %H" --date=short | while read -r date hash
@@ -39,14 +36,14 @@ jobs:
                 echo $date $hash
                 git checkout $hash -- partners/ || break
                 rm partners.db || true
-                sqlite-diffable load partners.db partners
+                uv run sqlite-diffable load partners.db partners
                 sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
           done
           wc -l premier.csv
           echo 'date,company,certifications' | cat - premier.csv > temp && mv temp premier.csv
       - name: Setup Pages
         uses: actions/configure-pages@v4
-      - run:  mkdir "_site" && mv plot/* premier.csv _site/
+      - run: mkdir "_site" && mv plot/* premier.csv _site/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
       - name: Deploy to GitHub Pages
