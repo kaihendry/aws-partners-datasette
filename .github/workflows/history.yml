@@ -37,10 +37,10 @@ jobs:
                 git checkout $hash -- partners/ || break
                 rm partners.db || true
                 uv run sqlite-diffable load partners.db partners
-                sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
+                sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count, customer_launches_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
           done
           wc -l premier.csv
-          echo 'date,company,certifications' | cat - premier.csv > temp && mv temp premier.csv
+          echo 'date,company,certifications,launches' | cat - premier.csv > temp && mv temp premier.csv
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - run: mkdir "_site" && mv plot/* premier.csv _site/
