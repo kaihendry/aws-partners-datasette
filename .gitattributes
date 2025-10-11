@@ -1,0 +1,1 @@
+partners/*.ndjson filter=lfs diff=lfs merge=lfs -text
