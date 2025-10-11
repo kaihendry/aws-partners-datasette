@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          lfs: true
       - uses: astral-sh/setup-uv@v7
       - name: Compute history
         run: |-
@@ -35,6 +36,7 @@ jobs:
           do
                 echo $date $hash
                 git checkout $hash -- partners/ || break
+                git lfs checkout partners/ || true
                 rm partners.db || true
                 uv run sqlite-diffable load partners.db partners
                 sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count, customer_launches_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
