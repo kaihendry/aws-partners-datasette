@@ -1,0 +1,17 @@
+{
+    "name": "summary",
+    "columns": [
+        "launch_rank",
+        "partner_info",
+        "logo",
+        "customer_type",
+        "current_program_status",
+        "website",
+        "customer_launches_count",
+        "services_count",
+        "reference_count",
+        "aws_certifications_count",
+        "office_address"
+    ],
+    "schema": "CREATE TABLE summary(\n  launch_rank,\n  partner_info,\n  logo,\n  customer_type TEXT,\n  current_program_status TEXT,\n  website TEXT,\n  customer_launches_count INT,\n  services_count INT,\n  reference_count INT,\n  aws_certifications_count INT,\n  office_address TEXT\n)"
+}
