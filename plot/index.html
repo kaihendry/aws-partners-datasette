@@ -1,13 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Partner Metrics Over Time</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 1rem;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin: 0 0 1rem 0;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: #232f3e;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+        label {
+            font-weight: 600;
+            color: #232f3e;
+        }
+        select {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            min-width: 200px;
+            max-width: 100%;
+        }
+        #myDiv {
+            width: 100%;
+            height: 500px;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            select {
+                width: 100%;
+            }
+            #myDiv {
+                height: 400px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <select id="companySelect"></select>
-    <div id="myDiv"></div>
-    <script src="script.js">
-    </script>
+    <div class="container">
+        <h1>AWS Premier Partner Metrics</h1>
+        <div class="controls">
+            <label for="companySelect">Select Partner:</label>
+            <select id="companySelect"></select>
+            <label for="metricSelect">Select Metric:</label>
+            <select id="metricSelect">
+                <option value="certifications">AWS Certifications</option>
+                <option value="launches">Customer Launches</option>
+                <option value="both">Both Metrics</option>
+            </select>
+        </div>
+        <div id="myDiv"></div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
