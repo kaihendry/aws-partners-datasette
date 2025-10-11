@@ -45,7 +45,7 @@ jobs:
           wc -l premier.csv
           echo 'date,company,certifications' | cat - premier.csv > temp && mv temp premier.csv
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
       - run:  mkdir "_site" && mv plot/* premier.csv _site/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
