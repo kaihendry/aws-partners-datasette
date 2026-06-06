@@ -29,11 +29,13 @@ jobs:
         with:
           fetch-depth: 0
           lfs: false
+      - name: Set up git-lfs
+        run: git lfs install
       - uses: astral-sh/setup-uv@v7
       - name: Fetch existing CSV from GitHub Pages
         run: |
           curl -sf "https://kaihendry.github.io/aws-partners-datasette/premier.csv" -o premier.csv || true
-          if [ -f premier.csv ]; then
+          if [ -f premier.csv ] && [ -s premier.csv ]; then
             LAST_DATE=$(tail -n +2 premier.csv | cut -d',' -f1 | sort | tail -1)
             echo "Last processed date: $LAST_DATE"
             echo "LAST_DATE=$LAST_DATE" >> $GITHUB_ENV
@@ -43,6 +45,7 @@ jobs:
           fi
       - name: Compute history (incremental)
         run: |-
+          touch new_rows.csv
           # Only process commits newer than the last processed date
           git log --pretty=format:"%ad %H %s" --date=short | \
             awk '/Latest data:/ {print $1, $2}' | \
@@ -54,25 +57,25 @@ jobs:
             fi
             echo "Processing: $date $hash"
             git checkout $hash -- partners/ || break
-            git lfs pull --include="partners/partners.ndjson,partners/summary.ndjson" 2>/dev/null || true
+            git lfs pull --include="partners/partners.ndjson,partners/summary.ndjson" || { echo "LFS pull failed for $hash, skipping"; continue; }
             rm -f partners.db
-            uv run sqlite-diffable load partners.db partners
+            uv run sqlite-diffable load partners.db partners || { echo "Load failed for $hash, skipping"; continue; }
             sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count, customer_launches_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> new_rows.csv
           done
-          # Merge: existing CSV (without header) + new rows, then re-sort and add header
-          if [ -f premier.csv ]; then
+          # Merge: existing CSV (without header) + new rows, sort, re-add header
+          if [ -f premier.csv ] && [ -s premier.csv ]; then
             tail -n +2 premier.csv > existing_rows.csv
           else
             touch existing_rows.csv
           fi
-          cat existing_rows.csv new_rows.csv 2>/dev/null | sort > merged.csv
+          cat existing_rows.csv new_rows.csv | sort > merged.csv
           echo 'date,company,certifications,launches' | cat - merged.csv > premier.csv
           wc -l premier.csv
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
       - run: mkdir "_site" && mv plot/* premier.csv _site/
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
