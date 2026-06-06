@@ -51,7 +51,7 @@ jobs:
             awk '/Latest data:/ {print $1, $2}' | \
             while read -r date hash
           do
-            if [[ "$date" <= "$LAST_DATE" ]]; then
+            if [[ ! "$date" > "$LAST_DATE" ]]; then
               echo "Skipping $date (already processed)"
               continue
             fi
