@@ -27,9 +27,9 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: Convert to newline-delimited JSON for archiving in git
         run: |-
-          rm -f partners/*.ndjson partners/*.ndjson.gz || true
+          rm -f partners/*.ndjson partners/*.ndjson.zst || true
           uv run sqlite-diffable dump partners.db partners --all
-          gzip partners/*.ndjson
+          zstd --rm partners/*.ndjson
       - name: Commit any changes
         run: |-
           git config user.name "Automated"
