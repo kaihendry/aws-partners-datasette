@@ -28,9 +28,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          lfs: false
-      - name: Set up git-lfs
-        run: git lfs install
       - uses: astral-sh/setup-uv@v7
       - name: Fetch existing CSV from GitHub Pages
         run: |
@@ -57,7 +54,7 @@ jobs:
             fi
             echo "Processing: $date $hash"
             git checkout $hash -- partners/ || break
-            git lfs pull --include="partners/partners.ndjson,partners/summary.ndjson" || { echo "LFS pull failed for $hash, skipping"; continue; }
+            gunzip -k -f partners/*.ndjson.gz 2>/dev/null || true
             rm -f partners.db
             uv run sqlite-diffable load partners.db partners || { echo "Load failed for $hash, skipping"; continue; }
             sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count, customer_launches_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> new_rows.csv

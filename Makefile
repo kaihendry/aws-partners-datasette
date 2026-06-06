@@ -17,12 +17,12 @@ publish: partners.db
 
 .PHONY: run
 run:
-	test -f partners.db || uv run sqlite-diffable load partners.db partners/
+	test -f partners.db || { gunzip -k -f partners/*.ndjson.gz 2>/dev/null; uv run sqlite-diffable load partners.db partners/; }
 	uv run datasette partners.db --metadata metadata.yaml
 
 .PHONY: agent
 agent:
-	test -f partners.db || uv run sqlite-diffable load partners.db partners/
+	test -f partners.db || { gunzip -k -f partners/*.ndjson.gz 2>/dev/null; uv run sqlite-diffable load partners.db partners/; }
 	curl -sf "https://kaihendry.github.io/aws-partners-datasette/premier.csv" | \
 	  uv run sqlite-utils insert partners.db premier - --csv --alter --replace 2>/dev/null || true
 	uvx --prerelease=allow --with datasette-agent --with datasette-agent-charts --with llm-gemini \

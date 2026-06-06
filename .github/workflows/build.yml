@@ -19,8 +19,6 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v6
-        with:
-          lfs: true
       - uses: astral-sh/setup-uv@v7
       - run: uv run datasette plugins
       - uses: superfly/flyctl-actions/setup-flyctl@master
@@ -29,8 +27,9 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: Convert to newline-delimited JSON for archiving in git
         run: |-
-          rm partners/* || true # remove old dump
+          rm -f partners/*.ndjson partners/*.ndjson.gz || true
           uv run sqlite-diffable dump partners.db partners --all
+          gzip partners/*.ndjson
       - name: Commit any changes
         run: |-
           git config user.name "Automated"
