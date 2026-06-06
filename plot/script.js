@@ -27,12 +27,17 @@ function updatePlot() {
 
     var filteredData = csvData.filter(row => row['company'] === company);
 
+    var allDates = csvData.map(row => row['date']).sort();
+    var globalMin = allDates[0];
+    var globalMax = allDates[allDates.length - 1];
+
     var traces = [];
     var layout = {
         xaxis: {
             title: 'Date',
             showgrid: true,
-            gridcolor: '#e0e0e0'
+            gridcolor: '#e0e0e0',
+            range: [globalMin, globalMax]
         },
         margin: {
             l: 60,
