@@ -2,6 +2,7 @@ title: AWS Partners Global
 about: kaihendry/aws-partners-datasette
 about_url: https://github.com/kaihendry/aws-partners-datasette
 description_html: |-
+        <p><a href="/-/agent">Ask AI about this data</a></p>
         <p>Example queries:</p>
         <ul>
         <li>

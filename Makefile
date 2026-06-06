@@ -20,6 +20,14 @@ run:
 	test -f partners.db || uv run sqlite-diffable load partners.db partners/
 	uv run datasette partners.db --metadata metadata.yaml
 
+.PHONY: agent
+agent:
+	test -f partners.db || uv run sqlite-diffable load partners.db partners/
+	uvx --prerelease=allow --with datasette-agent --with datasette-agent-charts --with llm-gemini \
+	  datasette partners.db --metadata metadata.yaml \
+	  -s plugins.datasette-llm.default_model gemini/gemini-3.5-flash \
+	  --internal internal.db --root
+
 .PHONY: clean
 clean:
 	rm -f partners.json partners.db

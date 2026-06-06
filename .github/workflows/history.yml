@@ -28,27 +28,46 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          lfs: true
+          lfs: false
       - uses: astral-sh/setup-uv@v7
-      - name: Compute history
+      - name: Fetch existing CSV from GitHub Pages
+        run: |
+          curl -sf "https://kaihendry.github.io/aws-partners-datasette/premier.csv" -o premier.csv || true
+          if [ -f premier.csv ]; then
+            LAST_DATE=$(tail -n +2 premier.csv | cut -d',' -f1 | sort | tail -1)
+            echo "Last processed date: $LAST_DATE"
+            echo "LAST_DATE=$LAST_DATE" >> $GITHUB_ENV
+          else
+            echo "No existing CSV, processing full history"
+            echo "LAST_DATE=0000-00-00" >> $GITHUB_ENV
+          fi
+      - name: Compute history (incremental)
         run: |-
-          # Only process commits that contain data updates (match "Latest data:" pattern)
+          # Only process commits newer than the last processed date
           git log --pretty=format:"%ad %H %s" --date=short | \
             awk '/Latest data:/ {print $1, $2}' | \
             while read -r date hash
           do
-                echo "Processing: $date $hash"
-                git checkout $hash -- partners/ || break
-                # Only try LFS checkout if the file is actually tracked by LFS
-                if git lfs ls-files -n | grep -q "partners/"; then
-                  git lfs checkout partners/ 2>/dev/null || true
-                fi
-                rm partners.db || true
-                uv run sqlite-diffable load partners.db partners
-                sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count, customer_launches_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> premier.csv
+            if [[ "$date" <= "$LAST_DATE" ]]; then
+              echo "Skipping $date (already processed)"
+              continue
+            fi
+            echo "Processing: $date $hash"
+            git checkout $hash -- partners/ || break
+            git lfs pull --include="partners/partners.ndjson,partners/summary.ndjson" 2>/dev/null || true
+            rm -f partners.db
+            uv run sqlite-diffable load partners.db partners
+            sqlite3 -csv partners.db "select '${date}' AS 'date', literal_name, aws_certifications_count, customer_launches_count from partners where current_program_status = 'Premier' and customer_type = 'Consulting Partner';" >> new_rows.csv
           done
+          # Merge: existing CSV (without header) + new rows, then re-sort and add header
+          if [ -f premier.csv ]; then
+            tail -n +2 premier.csv > existing_rows.csv
+          else
+            touch existing_rows.csv
+          fi
+          cat existing_rows.csv new_rows.csv 2>/dev/null | sort > merged.csv
+          echo 'date,company,certifications,launches' | cat - merged.csv > premier.csv
           wc -l premier.csv
-          echo 'date,company,certifications,launches' | cat - premier.csv > temp && mv temp premier.csv
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - run: mkdir "_site" && mv plot/* premier.csv _site/
