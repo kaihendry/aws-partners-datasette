@@ -35,6 +35,7 @@ function updatePlot() {
     var layout = {
         xaxis: {
             title: 'Date',
+            type: 'date',
             showgrid: true,
             gridcolor: '#e0e0e0',
             range: [globalMin, globalMax]

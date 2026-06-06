@@ -5,6 +5,9 @@ name: AWS certifications page
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'plot/**'
   workflow_run:
     workflows:
       - "Deploy Datasette and keep a history of changes of the partner db"
@@ -73,6 +76,8 @@ jobs:
       - run: mkdir "_site" && mv plot/* premier.csv _site/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
