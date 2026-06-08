@@ -25,9 +25,9 @@ agent:
 	test -f partners.db || { zstd -d --keep partners/*.ndjson.zst 2>/dev/null; uv run sqlite-diffable load partners.db partners/; }
 	curl -sf "https://kaihendry.github.io/aws-partners-datasette/premier.csv" | \
 	  uv run sqlite-utils insert partners.db premier - --csv --alter --replace 2>/dev/null || true
-	uvx --prerelease=allow --with datasette-agent --with datasette-agent-charts --with llm-gemini \
+	uvx --prerelease=allow --with datasette-agent --with datasette-agent-charts \
 	  datasette partners.db --metadata metadata.yaml \
-	  -s plugins.datasette-llm.default_model gemini/gemini-3.5-flash \
+	  -s plugins.datasette-llm.default_model gpt-5.5 \
 	  --internal internal.db --root
 
 .PHONY: clean
