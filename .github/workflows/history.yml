@@ -75,7 +75,7 @@ jobs:
         uses: actions/configure-pages@v6
       - run: mkdir "_site" && mv plot/* premier.csv _site/
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         env:
           FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       - name: Deploy to GitHub Pages
